@@ -12,62 +12,89 @@ public class PlayerMovement : MonoBehaviour
 
     Animator anim;
     protected CharacterController characterController;
+    public float speed = 4;
+    public float gravity = 9.81f;
+    private float verticalSpeed = 0;
 
-    protected Vector3 movement;
-
-    public float _rotationSpeed = 180;
-
-    private Vector3 rotation;
+     public Transform cameraHolder;
+    public float mouseSensitivity = 2f;
+    public float upLimit = -50;
+    public float downLimit = 50;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
-
+//  anim.SetBool("isWalking", false);
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
 
-        if (characterController.isGrounded == true)
-        {
+     move();
+     rotate();
 
-            movement = new Vector3(
-               0, 0, Input.GetAxis("Vertical"));
-            movement = transform.TransformDirection(movement);
-            movement *= 5.0f;
-
-            if (movement.x != 0 || movement.y != 0)
-            {
-                anim.SetBool("isWalking", true);
-            }
-            else
-            {
-                anim.SetBool("isWalking", false);
-            }
+    }
 
 
+    private void move() {
+     
+        float horizontalMove = Input.GetAxis("Horizontal");
+        float verticalMove = Input.GetAxis("Vertical");
 
-            if (Input.GetKey(KeyCode.Space) == true)
-            {
-                movement.y = 10.0f;
-                anim.SetBool("isWalking", false);
-            }
+        if(characterController.isGrounded) {
+              if(anim.GetBool("isJumping")) {
+          anim.SetBool("isJumping",false);
+              anim.SetTrigger("exitJump");
+              }
+            verticalSpeed = 0;
+           
+
+        } else {
+            verticalSpeed -= gravity * Time.deltaTime; 
         }
+        Vector3 gravityMove = new Vector3(0, verticalSpeed,0);
+        Vector3 move = transform.forward * verticalMove + transform.right *horizontalMove;
+        if(verticalMove < 0) {
+            this.speed = 1;
+        
+        
+        } else {
 
-        movement.y -= 20.0f * Time.deltaTime;
+            this.speed = 4;
+        }
+            anim.SetFloat("speed",this.speed);
+        characterController.Move(speed *Time.deltaTime *move + gravityMove * Time.deltaTime);
 
-        characterController.Move(movement * Time.deltaTime);
+      if (Input.GetKey(KeyCode.Space) == true && anim.GetBool("isJumping") == false)
+            {
+                 verticalSpeed = 5;
+              
+            
+                    anim.SetBool("isJumping",true);
+            
+              
+            }
 
 
+          anim.SetBool("isWalking", verticalMove != 0 || horizontalMove != 0);
 
     }
 
-    void LateUpdate()
-    {
-        this.rotation = new Vector3(0, Input.GetAxis("Horizontal") * _rotationSpeed * Time.fixedDeltaTime, 0);
+    private void rotate() {
 
-        this.transform.Rotate(this.rotation);
+        float horizontalRotation = Input.GetAxis("Mouse X");
+        float verticalRotation = Input.GetAxis("Mouse Y");
+        
+        transform.Rotate(0, horizontalRotation * mouseSensitivity, 0);
+        cameraHolder.Rotate(-verticalRotation*mouseSensitivity,0,0);
+
+        Vector3 currentRotation = cameraHolder.localEulerAngles;
+        if (currentRotation.x > 180) currentRotation.x -= 360;
+        currentRotation.x = Mathf.Clamp(currentRotation.x, upLimit, downLimit);
+        cameraHolder.localRotation = Quaternion.Euler(currentRotation);
+
     }
+   
 }
