@@ -16,14 +16,9 @@ public class InventorySystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ImpfstoffAnzahl == 0)
-        {
-            ImpfstoffText.text = "";
-        }
-        else
-        {
+        
             ImpfstoffText.text = ImpfstoffAnzahl.ToString();
-        }
+       
 
     }
 
