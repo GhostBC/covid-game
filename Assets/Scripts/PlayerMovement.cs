@@ -10,19 +10,20 @@ public class PlayerMovement: MonoBehaviour {
 
 	Animator anim;
 	protected CharacterController characterController;
-	public float speed = 4;
+	private float speed = 5;
 	public float gravity = 9.81f;
 	private float verticalSpeed = 0;
 
 	public Transform cameraHolder;
-	public float mouseSensitivity = 2f;
-	public float upLimit = -50;
-	public float downLimit = 50;
+	private float mouseSensitivity = 2f;
+	private float upLimit = -50;
+	private float downLimit = 50;
+
 
 	void Start() {
 		characterController = GetComponent < CharacterController > ();
 		anim = GetComponent < Animator > ();
-		//  anim.SetBool("isWalking", false);
+	
 	}
 
 	// Update is called once per frame
@@ -35,54 +36,88 @@ public class PlayerMovement: MonoBehaviour {
 
 	private void move() {
 
-		float horizontalMove = Input.GetAxis("Horizontal");
+	
 		float verticalMove = Input.GetAxis("Vertical");
 
-		if (characterController.isGrounded) {
-			if (anim.GetBool("isJumping")) {
-				anim.SetBool("isJumping", false);
-				anim.SetTrigger("exitJump");
-			}
-			verticalSpeed = 0;
-
-		} else {
-			verticalSpeed -= gravity * Time.deltaTime;
-		}
+	
 		Vector3 gravityMove = new Vector3(0, verticalSpeed, 0);
-		Vector3 move = transform.forward * verticalMove + transform.right * horizontalMove;
+		Vector3 move = transform.forward * verticalMove ;
 		if (verticalMove < 0) {
-			this.speed = 1;
+			this.speed = 3;
 
 		} else {
+		
+				this.speed = 5;
+		
 
-			this.speed = 4;
+			
 		}
 		anim.SetFloat("speed", this.speed);
 		characterController.Move(speed * Time.deltaTime * move + gravityMove * Time.deltaTime);
 
+			if (characterController.isGrounded) {
+			if (anim.GetBool("isJumping")) {
+				anim.SetBool("isJumping", false);
+				anim.SetTrigger("exitJump");
+			}
+			 verticalSpeed =  -characterController.stepOffset / Time.deltaTime;
+
+		} else {
+			verticalSpeed -= gravity  *  Time.deltaTime;
+		}
+
+
 		if (Input.GetKey(KeyCode.Space) == true && anim.GetBool("isJumping") == false) {
-			verticalSpeed = 5;
+			verticalSpeed = 10;
 
 			anim.SetBool("isJumping", true);
 
 		}
 
-		anim.SetBool("isWalking", verticalMove != 0 || horizontalMove != 0);
+
+		if(verticalMove > 0 ) {
+			  
+	 	 anim.SetBool("isWalking",true);
+		anim.SetBool("isWalkingBackwards",false);
+		  if(!Input.GetMouseButton(1)) {
+			  //Reset Camera behind the Player
+			  	Quaternion resetRotation = Quaternion.Euler(transform.rotation.eulerAngles);
+	 			 cameraHolder.rotation = Quaternion.Lerp(cameraHolder.rotation, resetRotation, Time.deltaTime * 3);
+		  }
+		} else {
+
+			if(verticalMove < 0 && characterController.isGrounded) {
+				anim.SetBool("isWalkingBackwards",true);
+			} else {
+				anim.SetBool("isWalkingBackwards",false);
+			}
+			anim.SetBool("isWalking",false);
+			
+		}
+
+		
+		
 
 	}
 
 	private void rotate() {
 
+  if (Input.GetMouseButton(1)) {
 		float horizontalRotation = Input.GetAxis("Mouse X");
 		float verticalRotation = Input.GetAxis("Mouse Y");
-
-		transform.Rotate(0, horizontalRotation * mouseSensitivity, 0);
-		cameraHolder.Rotate( - verticalRotation * mouseSensitivity, 0, 0);
 
 		Vector3 currentRotation = cameraHolder.localEulerAngles;
 		if (currentRotation.x > 180) currentRotation.x -= 360;
 		currentRotation.x = Mathf.Clamp(currentRotation.x, upLimit, downLimit);
+		currentRotation.z = 0;
 		cameraHolder.localRotation = Quaternion.Euler(currentRotation);
+			cameraHolder.Rotate( - verticalRotation * mouseSensitivity, horizontalRotation * mouseSensitivity, 0);
+  } else {
+
+   transform.Rotate(0.0f, Input.GetAxis ("Horizontal") * 0.25f, 0.0f);
+
+
+  }
 
 	}
 
