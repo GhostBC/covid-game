@@ -114,7 +114,7 @@ public class PlayerMovement: MonoBehaviour {
 			cameraHolder.Rotate( - verticalRotation * mouseSensitivity, horizontalRotation * mouseSensitivity, 0);
   } else {
 
-   transform.Rotate(0.0f, Input.GetAxis ("Horizontal") * 0.25f, 0.0f);
+   transform.Rotate(0.0f, Input.GetAxis ("Horizontal") * 0.45f, 0.0f);
 
 
   }
