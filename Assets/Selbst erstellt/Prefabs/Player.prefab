@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 1939423866510997694}
   - component: {fileID: 1939423866510997695}
   - component: {fileID: 1939423866510997692}
-  - component: {fileID: 1939423866510997680}
+  - component: {fileID: 7402041719822196360}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -518,7 +518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: 18
   cameraHolder: {fileID: 1939423867087170705}
---- !u!114 &1939423866510997680
+--- !u!114 &7402041719822196360
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -527,7 +527,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1939423866510997693}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88ecb1a61cfa45f43875072e5ebe70ce, type: 3}
+  m_Script: {fileID: 11500000, guid: b56db3c9bbbe3b649baa0f56dee032d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ImpfstoffAnzahl: 0

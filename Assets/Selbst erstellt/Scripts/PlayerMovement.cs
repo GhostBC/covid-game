@@ -78,7 +78,7 @@ public class PlayerMovement: MonoBehaviour {
 			  
 	 	 anim.SetBool("isWalking",true);
 		anim.SetBool("isWalkingBackwards",false);
-		  if(!Input.GetMouseButton(1)) {
+		  if(!Input.GetMouseButton(0)) {
 			  //Reset Camera behind the Player
 			  	Quaternion resetRotation = Quaternion.Euler(transform.rotation.eulerAngles);
 	 			 cameraHolder.rotation = Quaternion.Lerp(cameraHolder.rotation, resetRotation, Time.deltaTime * 3);
@@ -101,7 +101,7 @@ public class PlayerMovement: MonoBehaviour {
 
 	private void rotate() {
 
-  if (Input.GetMouseButton(1)) {
+  if (Input.GetMouseButton(0)) {
 		float horizontalRotation = Input.GetAxis("Mouse X");
 		float verticalRotation = Input.GetAxis("Mouse Y");
 
