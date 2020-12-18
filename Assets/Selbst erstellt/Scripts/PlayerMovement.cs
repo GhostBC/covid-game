@@ -111,6 +111,20 @@ public class PlayerMovement: MonoBehaviour {
 
 	private void rotate() {
 
+		  if (Input.GetKey(KeyCode.E) && characterController.isGrounded)
+        {
+           
+             characterController.SimpleMove(transform.TransformDirection(Vector3.right) * speed);
+			 	 anim.SetBool("isWalking",true);
+        }
+		 else if (Input.GetKey(KeyCode.Q)  && characterController.isGrounded)
+        {
+           
+             characterController.SimpleMove(transform.TransformDirection(Vector3.left) * speed);
+			 	 anim.SetBool("isWalking",true);
+        }
+
+
   if (Input.GetMouseButton(0)) {
 		float horizontalRotation = Input.GetAxis("Mouse X");
 		float verticalRotation = Input.GetAxis("Mouse Y");
