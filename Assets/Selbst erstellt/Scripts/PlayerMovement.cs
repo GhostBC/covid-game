@@ -19,6 +19,7 @@ public class PlayerMovement: MonoBehaviour {
 	private float upLimit = -50;
 	private float downLimit = 50;
 	public AudioClip jumpSound;
+	public AudioClip walkSound;
 	private AudioSource  audioSource;
 
 
@@ -73,6 +74,7 @@ public class PlayerMovement: MonoBehaviour {
 			verticalSpeed = 10;
 
 			anim.SetBool("isJumping", true);
+			audioSource.Stop();
 			 audioSource.PlayOneShot(jumpSound, 0.3F);
 
 		}
@@ -81,6 +83,10 @@ public class PlayerMovement: MonoBehaviour {
 		if(verticalMove > 0 ) {
 			  
 	 	 anim.SetBool("isWalking",true);
+		   if (!audioSource.isPlaying && characterController.isGrounded)
+        {
+		   audioSource.PlayOneShot(walkSound, 0.3F);
+		}
 		anim.SetBool("isWalkingBackwards",false);
 		  if(!Input.GetMouseButton(0)) {
 			  //Reset Camera behind the Player
