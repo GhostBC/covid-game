@@ -75,7 +75,7 @@ public class PlayerMovement: MonoBehaviour {
 
 			anim.SetBool("isJumping", true);
 			audioSource.Stop();
-			 audioSource.PlayOneShot(jumpSound, 0.3F);
+			 audioSource.PlayOneShot(jumpSound, 0.1F);
 
 		}
 
