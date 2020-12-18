@@ -5,7 +5,7 @@ using UnityEngine;
 public class InventorySystem : MonoBehaviour
 {
 
-    public int ImpfstoffAnzahl;
+    public int ImpfstoffAnzahl = 0;
     public Text ImpfstoffText;
     // Start is called before the first frame update
     void Start()
@@ -17,7 +17,13 @@ public class InventorySystem : MonoBehaviour
     void Update()
     {
         
-            ImpfstoffText.text = ImpfstoffAnzahl.ToString();
+
+if(this.ImpfstoffAnzahl.ToString() != this.ImpfstoffText.text) {
+  this.ImpfstoffText.text = this.ImpfstoffAnzahl.ToString();
+}
+
+      
+          
        
 
     }

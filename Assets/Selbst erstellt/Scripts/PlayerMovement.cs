@@ -18,11 +18,14 @@ public class PlayerMovement: MonoBehaviour {
 	private float mouseSensitivity = 2f;
 	private float upLimit = -50;
 	private float downLimit = 50;
+	public AudioClip jumpSound;
+	private AudioSource  audioSource;
 
 
 	void Start() {
 		characterController = GetComponent < CharacterController > ();
 		anim = GetComponent < Animator > ();
+		 audioSource = GetComponent<AudioSource>();
 	
 	}
 
@@ -70,6 +73,7 @@ public class PlayerMovement: MonoBehaviour {
 			verticalSpeed = 10;
 
 			anim.SetBool("isJumping", true);
+			 audioSource.PlayOneShot(jumpSound, 0.3F);
 
 		}
 
