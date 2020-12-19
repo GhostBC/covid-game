@@ -22,9 +22,13 @@ public class CreateSparkleOnDestroy : MonoBehaviour
         {
 
 
-            Vector3 end = new Vector3(transform.position.x, 1, transform.position.z);
+            GameObject player = GameObject.Find("Bip001");
+           
 
-            Instantiate(myPrefab, end, Quaternion.identity);
+            Vector3 end = new Vector3(transform.position.x , transform.position.y + 1.1f, transform.position.z );
+
+
+            Instantiate(myPrefab, new Vector3(player.transform.position.x, player.transform.position.y + 0.5f, player.transform.position.z), Quaternion.identity);
 
 
         }

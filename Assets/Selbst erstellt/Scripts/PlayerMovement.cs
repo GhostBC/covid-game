@@ -22,8 +22,18 @@ public class PlayerMovement: MonoBehaviour {
 	public AudioClip walkSound;
 	private AudioSource  audioSource;
 
+	
+    private float verticalRotation;
+    private float horizontalRotation;
+
 
 	void Start() {
+
+		    Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+		verticalRotation = transform.localEulerAngles.x;
+        horizontalRotation = transform.eulerAngles.y;
+
 		characterController = GetComponent < CharacterController > ();
 		anim = GetComponent < Animator > ();
 		 audioSource = GetComponent<AudioSource>();
@@ -33,10 +43,28 @@ public class PlayerMovement: MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 
+
+		look();
 		move();
-		rotate();
+	
 
 	}
+
+	private void look() {
+		float _mouseVertical = -Input.GetAxis("Mouse Y");
+        float _mouseHorizontal = Input.GetAxis("Mouse X");
+
+        verticalRotation += _mouseVertical * (mouseSensitivity * 200)  * Time.deltaTime;
+        horizontalRotation += _mouseHorizontal *  (mouseSensitivity * 200) * Time.deltaTime;
+
+        verticalRotation = Mathf.Clamp(verticalRotation, upLimit, downLimit);
+
+        cameraHolder.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+        transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
+
+		
+	}
+
 
 	private void move() {
 
@@ -55,28 +83,29 @@ public class PlayerMovement: MonoBehaviour {
 		
 			
 		}
-		anim.SetFloat("speed", this.speed);
-		characterController.Move(speed * Time.deltaTime * move + gravityMove * Time.deltaTime);
 
-			if (characterController.isGrounded) {
-			if (anim.GetBool("isJumping")) {
-				anim.SetBool("isJumping", false);
-				anim.SetTrigger("exitJump");
-			}
-			 verticalSpeed =  -characterController.stepOffset / Time.deltaTime;
-
-		} else {
-			verticalSpeed -= gravity  *  Time.deltaTime;
-		}
+		
 
 
 		if (Input.GetKey(KeyCode.Space) == true && anim.GetBool("isJumping") == false) {
-			verticalSpeed = 10;
+			verticalSpeed = 11;
 
 			anim.SetBool("isJumping", true);
 			audioSource.Stop();
 			 audioSource.PlayOneShot(jumpSound, 0.1F);
 
+		}
+
+			if (characterController.isGrounded) {
+			if (anim.GetBool("isJumping")) {
+				anim.SetBool("isJumping", false);
+				anim.SetTrigger("exitJump");
+			
+			}
+			 verticalSpeed =  0;
+
+		} else {
+			verticalSpeed -= gravity  *  Time.deltaTime;
 		}
 
 
@@ -91,7 +120,7 @@ public class PlayerMovement: MonoBehaviour {
 		  if(!Input.GetMouseButton(0)) {
 			  //Reset Camera behind the Player
 			  	Quaternion resetRotation = Quaternion.Euler(transform.rotation.eulerAngles);
-	 			 cameraHolder.rotation = Quaternion.Lerp(cameraHolder.rotation, resetRotation, Time.deltaTime * 3);
+	 			 cameraHolder.rotation = Quaternion.Lerp(cameraHolder.rotation, resetRotation, Time.deltaTime );
 		  }
 		} else {
 
@@ -104,44 +133,12 @@ public class PlayerMovement: MonoBehaviour {
 			
 		}
 
-		
+				anim.SetFloat("speed", this.speed);
+		characterController.Move(speed * Time.deltaTime * move + gravityMove * Time.deltaTime);
+
 		
 
 	}
 
-	private void rotate() {
-
-		  if (Input.GetKey(KeyCode.E) && characterController.isGrounded)
-        {
-           
-             characterController.SimpleMove(transform.TransformDirection(Vector3.right) * speed);
-			 	 anim.SetBool("isWalking",true);
-        }
-		 else if (Input.GetKey(KeyCode.Q)  && characterController.isGrounded)
-        {
-           
-             characterController.SimpleMove(transform.TransformDirection(Vector3.left) * speed);
-			 	 anim.SetBool("isWalking",true);
-        }
-
-
-  if (Input.GetMouseButton(0)) {
-		float horizontalRotation = Input.GetAxis("Mouse X");
-		float verticalRotation = Input.GetAxis("Mouse Y");
-
-		Vector3 currentRotation = cameraHolder.localEulerAngles;
-		if (currentRotation.x > 180) currentRotation.x -= 360;
-		currentRotation.x = Mathf.Clamp(currentRotation.x, upLimit, downLimit);
-		currentRotation.z = 0;
-		cameraHolder.localRotation = Quaternion.Euler(currentRotation);
-			cameraHolder.Rotate( - verticalRotation * mouseSensitivity, horizontalRotation * mouseSensitivity, 0);
-  } else {
-
-   transform.Rotate(0.0f, Input.GetAxis ("Horizontal") * 0.65f, 0.0f);
-
-
-  }
-
-	}
 
 }
