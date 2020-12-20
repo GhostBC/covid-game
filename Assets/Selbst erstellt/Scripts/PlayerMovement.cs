@@ -22,6 +22,7 @@ public class PlayerMovement: MonoBehaviour {
   private float downLimit = 50;
   public AudioClip jumpSound;
   public AudioClip walkSound;
+    public AudioClip DamageSound;
   private AudioSource audioSource;
 
   private float verticalRotation;
@@ -64,8 +65,9 @@ public class PlayerMovement: MonoBehaviour {
        if(newYPosition - oldYPosition > 5) {
          //Falldamage
          Debug.Log("FallDamage!! Difference: " + (newYPosition - oldYPosition) );
-
+      audioSource.PlayOneShot(DamageSound, 0.3F);
         StartCoroutine("CameraShake");
+
         GameObject.Find("Lebensanzeige").GetComponent<Image>().fillAmount -= 0.25f ;
 
 
@@ -86,6 +88,7 @@ public class PlayerMovement: MonoBehaviour {
   }
 
 
+
   private IEnumerator CameraShake()
         {
           GameObject.Find("CM vcam1").GetComponent<CinemachineVirtualCamera>()
@@ -95,7 +98,7 @@ public class PlayerMovement: MonoBehaviour {
                 while(GameObject.Find("CM vcam1").GetComponent<CinemachineVirtualCamera>()
          .GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>()
          .m_AmplitudeGain > 0) {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.25f);
                 if(GameObject.Find("CM vcam1").GetComponent<CinemachineVirtualCamera>()
          .GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>()
          .m_AmplitudeGain - 1 > 0) {

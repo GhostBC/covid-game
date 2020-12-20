@@ -74237,10 +74237,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7654635920282367319, guid: 84fa667d7d57c6745a853acfe276b2fb, type: 3}
+      propertyPath: DamageSound
+      value: 
+      objectReference: {fileID: 8300000, guid: c7ad252f7aaa99943acb44cdd7269ed9, type: 3}
     - target: {fileID: 7654635920282367320, guid: 84fa667d7d57c6745a853acfe276b2fb, type: 3}
       propertyPath: ImpfstoffText
       value: 
       objectReference: {fileID: 2040643591}
+    - target: {fileID: 7654635920282367320, guid: 84fa667d7d57c6745a853acfe276b2fb, type: 3}
+      propertyPath: ImpfstoffAnzahl
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7654635920282367322, guid: 84fa667d7d57c6745a853acfe276b2fb, type: 3}
       propertyPath: m_Name
       value: Player
