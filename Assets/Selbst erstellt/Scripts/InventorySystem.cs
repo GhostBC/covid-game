@@ -10,7 +10,7 @@ public class InventorySystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+ this.ImpfstoffText.text = "00" + this.ImpfstoffAnzahl.ToString();
     }
 
     // Update is called once per frame
@@ -19,7 +19,26 @@ public class InventorySystem : MonoBehaviour
         
 
 if(this.ImpfstoffAnzahl.ToString() != this.ImpfstoffText.text) {
-  this.ImpfstoffText.text = this.ImpfstoffAnzahl.ToString();
+
+    if(this.ImpfstoffAnzahl >0) {
+   
+
+    if(this.ImpfstoffAnzahl < 10) {
+          this.ImpfstoffText.text = "00" + this.ImpfstoffAnzahl.ToString();
+          return;
+    }
+     if(this.ImpfstoffAnzahl < 100) {
+          this.ImpfstoffText.text = "0" + this.ImpfstoffAnzahl.ToString();
+          return;
+    } else {
+         this.ImpfstoffText.text =  this.ImpfstoffAnzahl.ToString();
+          return;
+    }
+
+         
+    }
+
+
 }
 
       
