@@ -7,6 +7,7 @@ public class InventorySystem : MonoBehaviour
 
     public int ImpfstoffAnzahl = 0;
     public Text ImpfstoffText;
+    public bool hatSpritze = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -49,8 +50,21 @@ if(this.ImpfstoffAnzahl.ToString() != this.ImpfstoffText.text) {
 
     private void OnTriggerEnter(Collider other)
     {
+      
         if (other.gameObject.tag == "Impfstoff")
-            Destroy(other.gameObject);
+        {
+        Destroy(other.gameObject);
         this.ImpfstoffAnzahl++;
+       
+        }
+
+        else if (other.gameObject.tag == "Spritze")
+        {
+        Destroy(other.gameObject);
+        this.hatSpritze = true;
+       
+        }
+
+      
     }
 }

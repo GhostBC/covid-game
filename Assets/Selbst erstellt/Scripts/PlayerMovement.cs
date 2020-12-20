@@ -101,6 +101,8 @@ public class PlayerMovement: MonoBehaviour {
 
 
 
+
+
     if (characterController.isGrounded) {
       if (anim.GetBool("isJumping")) {
         anim.SetBool("isJumping", false);
