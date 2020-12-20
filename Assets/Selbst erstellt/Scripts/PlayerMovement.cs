@@ -5,6 +5,8 @@ using System.Collections.Specialized;
 using System.Security.Cryptography;
 using System.Threading;
 using UnityEngine;
+using Cinemachine;
+using UnityEngine.UI;
 
 public class PlayerMovement: MonoBehaviour {
 
@@ -25,16 +27,22 @@ public class PlayerMovement: MonoBehaviour {
   private float verticalRotation;
   private float horizontalRotation;
 
+  private float oldYPosition;
+  private float newYPosition;
+
   void Start() {
 
     Cursor.lockState = CursorLockMode.Locked;
     Cursor.visible = false;
     verticalRotation = transform.localEulerAngles.x;
     horizontalRotation = transform.eulerAngles.y;
+    oldYPosition = transform.position.y;
+    newYPosition = 0;
 
     characterController = GetComponent < CharacterController > ();
     anim = GetComponent < Animator > ();
     audioSource = GetComponent < AudioSource > ();
+
 
   }
 
@@ -42,8 +50,68 @@ public class PlayerMovement: MonoBehaviour {
   void Update() {
 
     move();
+    falldamage();
 
   }
+
+
+  private void falldamage() {
+
+
+    if(characterController.isGrounded) {
+      
+       
+       if(newYPosition - oldYPosition > 5) {
+         //Falldamage
+         Debug.Log("FallDamage!! Difference: " + (newYPosition - oldYPosition) );
+
+        StartCoroutine("CameraShake");
+        GameObject.Find("Lebensanzeige").GetComponent<Image>().fillAmount -= 0.25f ;
+
+
+         newYPosition = 0;
+       } else {
+        newYPosition = 0;
+       }
+    } else {
+       oldYPosition = transform.position.y;
+      if(newYPosition != oldYPosition && oldYPosition > newYPosition) {
+        //get highest value
+       newYPosition = transform.position.y;    
+      }
+    }
+
+   // Debug.Log("old: " + oldYPosition + " new: " + newYPosition);
+
+  }
+
+
+  private IEnumerator CameraShake()
+        {
+          GameObject.Find("CM vcam1").GetComponent<CinemachineVirtualCamera>()
+         .GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>()
+         .m_AmplitudeGain = 3;
+               
+                while(GameObject.Find("CM vcam1").GetComponent<CinemachineVirtualCamera>()
+         .GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>()
+         .m_AmplitudeGain > 0) {
+                yield return new WaitForSeconds(0.5f);
+                if(GameObject.Find("CM vcam1").GetComponent<CinemachineVirtualCamera>()
+         .GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>()
+         .m_AmplitudeGain - 1 > 0) {
+                  GameObject.Find("CM vcam1").GetComponent<CinemachineVirtualCamera>()
+         .GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>()
+         .m_AmplitudeGain -= 1;
+                } else {
+                  GameObject.Find("CM vcam1").GetComponent<CinemachineVirtualCamera>()
+         .GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>()
+         .m_AmplitudeGain = 0;
+                }
+                }
+                  
+        }
+ 
+
 
   private void move() {
 
